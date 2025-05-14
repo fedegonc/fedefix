@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  app:
+    image: fedefz16/spring:latest
+    container_name: fedefix_app
+    ports:
+      - "80:8080"
+    environment:
+      SPRING_APPLICATION_NAME: fedefix
+
+      # Base de datos (AWS RDS)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database-1-instance-1.cz2ga0y4aal1.sa-east-1.rds.amazonaws.com:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${SQL}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_INITIALIZATION_MODE: always
+      SPRING_DATASOURCE_MAXIMUM_POOL_SIZE: 10
+      SPRING_DATASOURCE_MINIMUM_IDLE: 5
+      SPRING_DATASOURCE_MAX_LIFETIME: 300000
+      SPRING_DATASOURCE_CONNECTION_TIMEOUT: 30000
+
+      # JPA
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_BATCH_FETCH_SIZE: 100
+      SPRING_JPA_PROPERTIES_HIBERNATE_ORDER_INSERTS: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_ORDER_UPDATES: "true"
+
+      # Subida de archivos
+      SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE: 10MB
+      SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE: 10MB
+
+      # AWS (si lo necesitás)
+      AWS_ENABLED: "false"
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: sa-east-1
+      AWS_S3_BUCKET: fedefix
+      AWS_S3_CORS_ENDPOINT: "https://fedefix.s3.sa-east-1.amazonaws.com"
+
+    restart: unless-stopped
+    env_file:
+      - .env
+
