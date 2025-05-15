@@ -1,0 +1,13 @@
+# Archivos del sistema y de usuario
+.bash*
+.viminfo
+
+# Claves, SSH y configuración privada
+.ssh/
+.docker/
+*.pem
+*.key
+
+# Carpetas duplicadas
+fedefix/
+fedefix-project/
