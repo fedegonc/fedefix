@@ -18,7 +18,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ec2-user/app
+            echo "📦 Deteniendo contenedor existente (si hay)..."
+            docker stop fedefix_app || true
+            docker rm fedefix_app || true
+
+            echo "📥 Bajando última imagen desde Docker Hub..."
             docker-compose pull
+
+            echo "🚀 Levantando contenedor actualizado..."
             docker-compose up -d --force-recreate --remove-orphans
 
-
+            echo "✅ Deploy completado."
